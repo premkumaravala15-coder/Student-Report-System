@@ -13,6 +13,17 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+// Vercel routes requests with the /api prefix. Remove that prefix so the
+// existing Express routes (/students, /marks, /attendance, /remarks) match.
+app.use((req, res, next) => {
+  if (req.url === "/api") {
+    req.url = "/";
+  } else if (req.url.startsWith("/api/")) {
+    req.url = req.url.slice(4);
+  }
+  next();
+});
+
 // MongoDB connection. Set MONGO_URI in Vercel and in backend/.env locally.
 const MONGO_URI =
   process.env.MONGO_URI || "mongodb://127.0.0.1:27017/student_report_db";
