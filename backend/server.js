@@ -13,9 +13,34 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// MongoDB connection
+// MongoDB connection. Set MONGO_URI in Vercel and in backend/.env locally.
 const MONGO_URI =
   process.env.MONGO_URI || "mongodb://127.0.0.1:27017/student_report_db";
+
+let mongoConnectionPromise;
+
+async function connectToDatabase(req, res, next) {
+  try {
+    if (mongoose.connection.readyState === 1) {
+      return next();
+    }
+
+    if (!mongoConnectionPromise) {
+      mongoConnectionPromise = mongoose.connect(MONGO_URI).catch((error) => {
+        mongoConnectionPromise = null;
+        throw error;
+      });
+    }
+
+    await mongoConnectionPromise;
+    next();
+  } catch (error) {
+    console.error("MongoDB connection error:", error.message);
+    res.status(500).json({ message: "Database connection failed." });
+  }
+}
+
+app.use(connectToDatabase);
 
 // Student schema
 const studentSchema = new mongoose.Schema(
@@ -348,18 +373,14 @@ app.delete("/remarks/:id", async (req, res) => {
   }
 });
 
-// Start server after MongoDB connects
+// Export the Express app for Vercel. Start a local HTTP server only when
+// this file is run directly with "node server.js".
 const PORT = process.env.PORT || 5000;
 
-mongoose
-  .connect(MONGO_URI)
-  .then(() => {
-    console.log("MongoDB connected successfully");
-
-    app.listen(PORT, () => {
-      console.log(`Backend running on port ${PORT}`);
-    });
-  })
-  .catch((error) => {
-    console.log("MongoDB connection error:", error.message);
+if (require.main === module) {
+  app.listen(PORT, () => {
+    console.log(`Backend running on port ${PORT}`);
   });
+}
+
+module.exports = app;
