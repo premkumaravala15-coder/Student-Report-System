@@ -1,8 +1,8 @@
 
 import { useEffect, useState } from "react";
 
-const STUDENTS_URL = "http://localhost:5000/students";
-const MARKS_URL = "http://localhost:5000/marks";
+const STUDENTS_URL = "/api/students";
+const MARKS_URL = "/api/marks";
 
 const emptyForm = {
   studentId: "",
