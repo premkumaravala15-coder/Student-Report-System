@@ -1,0 +1,689 @@
+
+/* =====================================
+   STUDENT REPORT SYSTEM - MODERN DESIGN
+===================================== */
+
+:root {
+  font-family: "Inter", "Segoe UI", Arial, sans-serif;
+  color: #172033;
+  background: #f4f6fb;
+
+  --primary: #5145cd;
+  --primary-dark: #3f35a8;
+  --primary-light: #eeedff;
+  --text: #172033;
+  --muted: #718096;
+  --border: #e5e9f2;
+  --surface: #ffffff;
+  --success: #16a36a;
+  --danger: #dc4545;
+  --shadow: 0 8px 25px rgba(28, 39, 70, 0.06);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  min-height: 100vh;
+  background: #f4f6fb;
+  color: var(--text);
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+}
+
+button {
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+  outline: 3px solid rgba(81, 69, 205, 0.2);
+  outline-offset: 2px;
+}
+
+/* MAIN APP */
+
+.app {
+  display: flex;
+  min-height: 100vh;
+}
+
+/* SIDEBAR */
+
+.sidebar {
+  position: fixed;
+  top: 0;
+  left: -280px;
+  z-index: 1000;
+  width: 260px;
+  height: 100vh;
+  overflow-y: auto;
+  padding: 32px 19px;
+  color: white;
+  background: linear-gradient(180deg, #171d45, #29245e);
+  box-shadow: 8px 0 30px rgba(15, 23, 42, 0.13);
+  transition: left 0.3s ease;
+}
+
+.sidebar.open {
+  left: 0;
+}
+
+.sidebar h2 {
+  margin: 0 0 8px;
+  font-size: 23px;
+  font-weight: 750;
+  letter-spacing: -0.5px;
+}
+
+.sidebar p {
+  margin: 0 0 35px;
+  color: #bfc6f5;
+  font-size: 13px;
+}
+
+.sidebar nav {
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+}
+
+.sidebar button {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  padding: 14px 15px;
+  border: 1px solid transparent;
+  border-radius: 11px;
+  background: transparent;
+  color: #dce1ff;
+  text-align: left;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.sidebar button:hover,
+.sidebar button.active {
+  color: white;
+  background: linear-gradient(110deg, #5145cd, #7166e8);
+  box-shadow: 0 5px 15px rgba(81, 69, 205, 0.25);
+}
+
+.sidebar button:hover {
+  transform: translateX(3px);
+}
+
+/* MAIN CONTENT */
+
+.main {
+  flex: 1;
+  min-width: 0;
+  padding: 30px;
+  transition: padding 0.3s ease;
+}
+
+/* TOP HEADER */
+
+.main header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  margin-bottom: 32px;
+  padding-bottom: 22px;
+  border-bottom: 1px solid var(--border);
+}
+
+.main header span {
+  color: #667085;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.dashboard-btn {
+  padding: 12px 19px;
+  border: none;
+  border-radius: 10px;
+  color: white;
+  background: linear-gradient(135deg, #5145cd, #7166e8);
+  box-shadow: 0 5px 13px rgba(81, 69, 205, 0.2);
+  font-weight: 650;
+}
+
+.dashboard-btn:hover {
+  background: var(--primary-dark);
+  transform: translateY(-2px);
+}
+
+/* DASHBOARD HEADER */
+
+.report-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  margin-bottom: 30px;
+}
+
+.report-header h1 {
+  margin: 0 0 10px;
+  color: #20294d;
+  font-size: clamp(23px, 3vw, 31px);
+  font-weight: 750;
+  letter-spacing: -0.7px;
+}
+
+.report-header p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.7;
+}
+
+/* DASHBOARD CARDS */
+
+.cards {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 22px;
+  margin-top: 28px;
+}
+
+.card,
+.page-card {
+  min-width: 0;
+  padding: 26px;
+  border: 1px solid var(--border);
+  border-radius: 17px;
+  background: var(--surface);
+  box-shadow: var(--shadow);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card:hover,
+.page-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 13px 30px rgba(28, 39, 70, 0.1);
+}
+
+.card h3 {
+  margin: 0 0 15px;
+  color: var(--muted);
+  font-size: 14px;
+  font-weight: 650;
+}
+
+.card h2 {
+  margin: 0;
+  color: var(--primary);
+  font-size: 36px;
+  font-weight: 800;
+}
+
+/* FORMS */
+
+.student-form {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 17px;
+  margin: 25px 0;
+  padding: 25px;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  background: white;
+  box-shadow: var(--shadow);
+}
+
+.student-form input,
+.student-form select,
+.student-form textarea,
+.student-search,
+.attendance-date input,
+.report-card select {
+  width: 100%;
+  min-width: 0;
+  padding: 13px 15px;
+  border: 1px solid #dce2ed;
+  border-radius: 10px;
+  background: white;
+  color: var(--text);
+  font-size: 14px;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.student-form input:focus,
+.student-form select:focus,
+.student-form textarea:focus,
+.student-search:focus,
+.attendance-date input:focus,
+.report-card select:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(81, 69, 205, 0.1);
+  outline: none;
+}
+
+.student-form button,
+.student-table button {
+  padding: 11px 16px;
+  border: none;
+  border-radius: 9px;
+  color: white;
+  background: var(--primary);
+  font-size: 13px;
+  font-weight: 650;
+}
+
+.student-form button:hover,
+.student-table button:hover {
+  background: var(--primary-dark);
+  transform: translateY(-1px);
+}
+
+.student-search {
+  margin-bottom: 20px;
+}
+
+/* TABLES */
+
+.student-table-container,
+.report-table-wrapper {
+  width: 100%;
+  overflow-x: auto;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  background: white;
+  box-shadow: var(--shadow);
+}
+
+.student-table,
+.report-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+}
+
+.student-table th,
+.student-table td,
+.report-table th,
+.report-table td {
+  padding: 15px 17px;
+  border-bottom: 1px solid #edf0f6;
+  font-size: 13px;
+}
+
+.student-table th,
+.report-table th {
+  background: #f0efff;
+  color: #45416f;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.student-table tbody tr:hover,
+.report-table tbody tr:hover {
+  background: #f8f8ff;
+}
+
+.student-table tbody tr:last-child td,
+.report-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.student-table button:last-child {
+  background: #fff0f0;
+  color: #c53030;
+}
+
+.student-table button:last-child:hover {
+  background: #ffe0e0;
+}
+
+/* ATTENDANCE */
+
+.attendance-page {
+  padding-bottom: 30px;
+}
+
+.attendance-date {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 14px;
+  margin: 22px 0;
+  padding: 20px;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  background: white;
+  box-shadow: var(--shadow);
+}
+
+.attendance-date input {
+  max-width: 250px;
+}
+
+.attendance-summary {
+  margin-bottom: 24px;
+}
+
+.attendance-present {
+  color: var(--success);
+  font-weight: 700;
+}
+
+.attendance-absent {
+  color: var(--danger);
+  font-weight: 700;
+}
+
+.attendance-page input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  accent-color: var(--primary);
+  cursor: pointer;
+}
+
+.attendance-page > button {
+  margin-top: 20px;
+  padding: 13px 22px;
+  border: none;
+  border-radius: 10px;
+  color: white;
+  background: var(--primary);
+  font-weight: 650;
+}
+
+.attendance-page > button:hover {
+  background: var(--primary-dark);
+}
+
+.attendance-page > button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.attendance-message {
+  margin: 15px 0;
+}
+
+/* REPORTS */
+
+.report-page {
+  padding: 20px 0;
+  color: var(--text);
+}
+
+.report-card {
+  margin-bottom: 24px;
+  padding: 26px;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  background: white;
+  box-shadow: var(--shadow);
+}
+
+.report-card h2 {
+  margin: 0 0 20px;
+  color: #20294d;
+  font-size: 19px;
+}
+
+.report-card label {
+  display: block;
+  margin-bottom: 10px;
+  color: #475569;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.report-card select {
+  max-width: 450px;
+}
+
+.report-student-details {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px 22px;
+}
+
+.report-student-details p {
+  margin: 4px 0;
+  color: #475569;
+  line-height: 1.7;
+  overflow-wrap: anywhere;
+}
+
+.report-summary {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 18px;
+  margin-bottom: 25px;
+}
+
+.report-stat-card {
+  min-width: 0;
+  padding: 23px;
+  border: 1px solid #e2e1ff;
+  border-radius: 15px;
+  background: linear-gradient(145deg, #ffffff, #f0efff);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.report-stat-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 25px rgba(81, 69, 205, 0.09);
+}
+
+.report-stat-card h3 {
+  margin: 0 0 13px;
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.report-stat-card p {
+  margin: 0 0 9px;
+  color: var(--primary);
+  font-size: 29px;
+  font-weight: 800;
+  overflow-wrap: anywhere;
+}
+
+.report-stat-card span {
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.report-print-button {
+  padding: 12px 20px;
+  border: none;
+  border-radius: 10px;
+  color: white;
+  background: var(--primary);
+  font-weight: 650;
+}
+
+.report-print-button:hover {
+  background: var(--primary-dark);
+  box-shadow: 0 5px 14px rgba(81, 69, 205, 0.2);
+}
+
+.report-print-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.report-error {
+  color: var(--danger);
+}
+
+/* GENERAL ELEMENTS */
+
+.page-card h2,
+.page-card h3 {
+  color: #20294d;
+}
+
+input,
+select,
+textarea {
+  max-width: 100%;
+}
+
+::selection {
+  color: #3730a3;
+  background: #e6e4ff;
+}
+
+/* TABLET */
+
+@media (max-width: 1000px) {
+  .main {
+    padding: 24px;
+  }
+
+  .report-summary {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+/* MOBILE */
+
+@media (max-width: 700px) {
+  .main {
+    padding: 17px;
+  }
+
+  .main header {
+    align-items: flex-start;
+    flex-wrap: wrap;
+    margin-bottom: 23px;
+    padding-bottom: 17px;
+  }
+
+  .main header span {
+    font-size: 12px;
+  }
+
+  .cards {
+    grid-template-columns: 1fr;
+    gap: 15px;
+  }
+
+  .card,
+  .page-card {
+    padding: 20px;
+    border-radius: 13px;
+  }
+
+  .student-form {
+    grid-template-columns: 1fr;
+    padding: 18px;
+  }
+
+  .student-table th,
+  .student-table td,
+  .report-table th,
+  .report-table td {
+    padding: 12px;
+  }
+
+  .report-page {
+    padding: 12px 0;
+  }
+
+  .report-header {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .report-summary {
+    grid-template-columns: 1fr;
+    gap: 13px;
+  }
+
+  .report-student-details {
+    grid-template-columns: 1fr;
+  }
+
+  .report-card {
+    padding: 18px;
+  }
+
+  .attendance-date {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .attendance-date input {
+    max-width: 100%;
+  }
+}
+
+@media (max-width: 400px) {
+  .main {
+    padding: 12px;
+  }
+
+  .dashboard-btn {
+    padding: 10px 13px;
+    font-size: 13px;
+  }
+
+  .report-stat-card {
+    padding: 18px;
+  }
+}
+
+/* PRINT REPORT */
+
+@media print {
+  body {
+    background: white;
+  }
+
+  body * {
+    visibility: hidden;
+  }
+
+  .report-page,
+  .report-page * {
+    visibility: visible;
+  }
+
+  .report-page {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    padding: 0;
+    background: white;
+  }
+
+  .report-print-button,
+  .report-page select {
+    display: none !important;
+  }
+
+  .report-card,
+  .report-stat-card {
+    break-inside: avoid;
+    box-shadow: none;
+  }
+
+  .report-table-wrapper {
+    overflow: visible;
+  }
+}
