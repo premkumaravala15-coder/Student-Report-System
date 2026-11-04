@@ -35,9 +35,9 @@ function App() {
       setDashboardError("");
 
       const responses = await Promise.all([
-        fetch("http://localhost:5000/students"),
-        fetch("http://localhost:5000/marks"),
-        fetch("http://localhost:5000/attendance"),
+        fetch("/api/students"),
+        fetch("/api/marks"),
+        fetch("/api/attendance"),
       ]);
 
       if (responses.some((response) => !response.ok)) {
