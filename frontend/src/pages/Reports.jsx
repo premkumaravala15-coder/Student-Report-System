@@ -1,10 +1,10 @@
 
 import { useCallback, useEffect, useState } from "react";
 
-const STUDENTS_URL = "http://localhost:5000/students";
-const MARKS_URL = "http://localhost:5000/marks";
-const ATTENDANCE_URL = "http://localhost:5000/attendance";
-const REMARKS_URL = "http://localhost:5000/remarks";
+const STUDENTS_URL = "/api/students";
+const MARKS_URL = "/api/marks";
+const ATTENDANCE_URL = "/api/attendance";
+const REMARKS_URL = "/api/remarks";
 
 // Add the teacher's login token to every API request.
 function getHeaders() {
@@ -203,7 +203,7 @@ function Reports() {
       {error && (
         <div className="report-card">
           <p className="report-error">{error}</p>
-          <p>Make sure your backend is running on port 5000.</p>
+          <p>Make sure the backend API is deployed and available at /api.</p>
           <button
             type="button"
             onClick={() => fetchReportData(true)}
