@@ -1,8 +1,8 @@
 
 import { useEffect, useState } from "react";
 
-const STUDENTS_URL = "http://localhost:5000/students";
-const REMARKS_URL = "http://localhost:5000/remarks";
+const STUDENTS_URL = "/api/students";
+const REMARKS_URL = "/api/remarks";
 
 function getToday() {
   const now = new Date();
